@@ -13,7 +13,6 @@ def get_achievements(user_id):
         raise NotFound(detail='User not found')
     achievements = list()
     achievements += _get_likes_achievements(user)
-    achievements += _get_displays_achievements(user)
     achievements += _get_created_achievements(user)
     achievements += _get_geoguesser_achievements(user)
     achieved = _parse_achievements(achievements)
@@ -68,27 +67,6 @@ def _get_likes_achievements(user):
 
 def _get_user_most_liked_spot(user):
     spots_qs = SpotCommon.objects.annotate(like_count=Count('likes')).filter(owner=user).order_by('-like_count')
-    return spots_qs[0]
-
-
-def _get_displays_achievements(user):
-    achievements = [
-        {
-            'description': 'Total spots viewed',
-            'comparator': user.displays.count(),
-            'tiers': [25, 50, 100]
-        },
-        {
-            'description': 'One spot earned views',
-            'comparator': _get_user_most_displayed_spot(user).display_count,
-            'tiers': [10, 25, 50, 100]
-        },
-    ]
-    return achievements
-
-
-def _get_user_most_displayed_spot(user):
-    spots_qs = SpotCommon.objects.annotate(display_count=Count('displays')).filter(owner=user).order_by('-display_count')
     return spots_qs[0]
 
 
