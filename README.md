@@ -1,2 +1,2 @@
-# ITU
-VUT FIT ITU project
+Inštalácia:
+
